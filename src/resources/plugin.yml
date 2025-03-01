@@ -1,0 +1,10 @@
+name: WorkServerOrPlay
+main: me.avankziar.wsop.spigot.WSOP
+version: 1
+author: Avankziar
+api-version: 1.21
+description: A mc plugin, where staffmembers can turn off there groups to play normally.
+depend: [InterfaceHub]
+softdepend: [RootAdministration]
+website: TBA
+prefix: WSOP

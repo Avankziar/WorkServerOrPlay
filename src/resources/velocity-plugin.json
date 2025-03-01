@@ -1,0 +1,8 @@
+{"id":"workserverorplay",
+"name":"WorkServerOrPlay",
+"version":"1-0-0",
+"description":"A mc plugin, where staffmembers can turn off there groups to play normally.",
+"authors":["Avankziar"],
+"url":"https://example.com",
+"dependencies":[{id='interfacehub', version='null', optional=false}],
+"main":"me.avankziar.wsop.velocity.WSOP"}

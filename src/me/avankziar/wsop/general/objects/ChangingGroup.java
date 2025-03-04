@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -19,21 +20,25 @@ import me.avankziar.wsop.general.database.ServerType;
  * @author User
  *
  */
-public class PlayerData implements MysqlTable<PlayerData>
+public class ChangingGroup implements MysqlTable<ChangingGroup>
 {
-	private int id;
+	private long id;
 	private UUID uuid;
 	private String name;
-	private boolean ignoreAdvertising;
+	private String changedGroup;
+	private String context;
+	private boolean primaryGroup;
 	
-	public PlayerData(){}
+	public ChangingGroup(){}
 	
-	public PlayerData(int id, UUID uuid, String name, boolean ignoreAdvertising)
+	public ChangingGroup(long id, UUID uuid, String name, String changedGroup, boolean primaryGroup, String... context)
 	{
 		setId(id);
 		setUUID(uuid);
 		setName(name);
-		setIgnoreAdvertising(ignoreAdvertising);
+		setChangedGroup(changedGroup);
+		setPrimaryGroup(primaryGroup);
+		setContext(String.join(";", context));
 	}
 	
 	public ServerType getServerType()
@@ -41,12 +46,12 @@ public class PlayerData implements MysqlTable<PlayerData>
 		return ServerType.ALL;
 	}
 
-	public int getId()
+	public long getId()
 	{
 		return id;
 	}
 
-	public void setId(int id)
+	public void setId(long id)
 	{
 		this.id = id;
 	}
@@ -70,20 +75,56 @@ public class PlayerData implements MysqlTable<PlayerData>
 	{
 		this.name = name;
 	}
-	
-	public boolean isIgnoreAdvertising()
-	{
-		return ignoreAdvertising;
+
+	public String getChangedGroup() {
+		return changedGroup;
 	}
 
-	public void setIgnoreAdvertising(boolean ignoreAdvertising)
+	public void setChangedGroup(String changedGroup) {
+		this.changedGroup = changedGroup;
+	}
+	
+	public boolean isPrimaryGroup() {
+		return primaryGroup;
+	}
+
+	public void setPrimaryGroup(boolean primaryGroup) {
+		this.primaryGroup = primaryGroup;
+	}
+
+	public String getContext()
 	{
-		this.ignoreAdvertising = ignoreAdvertising;
+		return context;
+	}
+	
+	public LinkedHashMap<String, String> getContextMap()
+	{
+		if(context == null)
+		{
+			return null;
+		}
+		String[] a = context.split(";");
+		LinkedHashMap<String, String> map = new LinkedHashMap<>();
+		for(String split : a)
+		{
+			String[] s = split.split("=");
+			if(s.length != 2)
+			{
+				continue;
+			}
+			map.put(s[0], s[1]);
+		}
+		return map;
+	}
+
+	public void setContext(String context)
+	{
+		this.context = context;
 	}
 
 	public String getMysqlTableName()
 	{
-		return "llyPlayerData";
+		return "wsopPlayerData";
 	}
 	
 	public boolean setupMysql(MysqlBaseSetup mysqlSetup, ServerType serverType)
@@ -91,9 +132,11 @@ public class PlayerData implements MysqlTable<PlayerData>
 		StringBuilder sql = new StringBuilder();
 		sql.append("CREATE TABLE IF NOT EXISTS `"+getMysqlTableName()
 				+ "` (id bigint AUTO_INCREMENT PRIMARY KEY,"
-				+ " player_uuid char(36) NOT NULL UNIQUE,"
+				+ " player_uuid char(36) NOT NULL,"
 				+ " player_name varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,"
-				+ " ignore_advertising boolean);");
+				+ " changing_groups text,"
+				+ " primary_group boolean,"
+				+ " contextset text);");
 		return mysqlSetup.baseSetup(sql.toString());
 	}
 
@@ -103,12 +146,14 @@ public class PlayerData implements MysqlTable<PlayerData>
 		try
 		{
 			String sql = "INSERT INTO `" + getMysqlTableName()
-					+ "`(`player_uuid`, `player_name`, `ignore_advertising`) " 
+					+ "`(`player_uuid`, `player_name`, `changing_groups`, `primary_group`, `contextset`) " 
 					+ "VALUES(?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 	        ps.setString(1, getUUID().toString());
 	        ps.setString(2, getName());
-	        ps.setBoolean(3, isIgnoreAdvertising());
+	        ps.setString(3, getChangedGroup());
+	        ps.setBoolean(4, isPrimaryGroup());
+	        ps.setString(5, getContext());
 	        int i = ps.executeUpdate();
 	        MysqlBaseHandler.addRows(QueryType.INSERT, i);
 	        return true;
@@ -125,13 +170,15 @@ public class PlayerData implements MysqlTable<PlayerData>
 		try
 		{
 			String sql = "UPDATE `" + getMysqlTableName()
-				+ "` SET `player_uuid` = ?, `player_name` = ?, `ignore_advertising` = ?" 
+				+ "` SET `player_uuid` = ?, `player_name` = ?, `changing_groups` = ?, `primary_group` = ?, `contextset` = ?" 
 				+ " WHERE "+whereColumn;
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, getUUID().toString());
 			ps.setString(2, getName());
-			ps.setBoolean(3, isIgnoreAdvertising());
-			int i = 4;
+			ps.setString(3, getChangedGroup());
+	        ps.setBoolean(4, isPrimaryGroup());
+	        ps.setString(5, getContext());
+			int i = 6;
 			for(Object o : whereObject)
 			{
 				ps.setObject(i, o);
@@ -148,7 +195,7 @@ public class PlayerData implements MysqlTable<PlayerData>
 	}
 
 	@Override
-	public ArrayList<PlayerData> get(Connection conn, String orderby, String limit, String whereColumn, Object... whereObject)
+	public ArrayList<ChangingGroup> get(Connection conn, String orderby, String limit, String whereColumn, Object... whereObject)
 	{
 		try
 		{
@@ -164,13 +211,15 @@ public class PlayerData implements MysqlTable<PlayerData>
 			
 			ResultSet rs = ps.executeQuery();
 			MysqlBaseHandler.addRows(QueryType.READ, rs.getMetaData().getColumnCount());
-			ArrayList<PlayerData> al = new ArrayList<>();
+			ArrayList<ChangingGroup> al = new ArrayList<>();
 			while (rs.next()) 
 			{
-				al.add(new PlayerData(rs.getInt("id"),
+				al.add(new ChangingGroup(rs.getInt("id"),
 						UUID.fromString(rs.getString("player_uuid")),
 						rs.getString("player_name"),
-						rs.getBoolean("ignore_advertising")));
+						rs.getString("changing_groups"),
+						rs.getBoolean("primary_group"),
+						rs.getString("contextset")));
 			}
 			return al;
 		} catch (SQLException e)

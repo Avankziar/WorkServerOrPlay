@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
-import me.avankziar.wsop.general.objects.PlayerData;
+import me.avankziar.wsop.general.objects.ChangingGroup;
 
 public class MysqlBaseSetup 
 {
@@ -47,7 +47,7 @@ public class MysqlBaseSetup
 	public static ArrayList<MysqlTable<?>> register = new ArrayList<>();
 	static
 	{
-		register.add(new PlayerData());
+		register.add(new ChangingGroup());
 	}
 	
 	public boolean loadMysqlSetup(ServerType serverType)

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -21,11 +20,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import me.avankziar.ifh.general.modifier.ModificationType;
-import me.avankziar.ifh.general.modifier.Modifier;
-import me.avankziar.ifh.general.valueentry.ValueEntry;
 import me.avankziar.ifh.spigot.administration.Administration;
 import me.avankziar.wsop.general.assistance.Utility;
 import me.avankziar.wsop.general.cmdtree.BaseConstructor;
@@ -36,12 +31,12 @@ import me.avankziar.wsop.general.database.YamlHandler;
 import me.avankziar.wsop.general.database.YamlManager;
 import me.avankziar.wsop.spigot.ModifierValueEntry.Bypass;
 import me.avankziar.wsop.spigot.assistance.BackgroundTask;
-import me.avankziar.wsop.spigot.cmd.BaseCommandExecutor;
 import me.avankziar.wsop.spigot.cmd.TabCompletion;
+import me.avankziar.wsop.spigot.cmd.TeamCommandExecutor;
 import me.avankziar.wsop.spigot.cmdtree.ArgumentModule;
 import me.avankziar.wsop.spigot.database.MysqlHandler;
 import me.avankziar.wsop.spigot.database.MysqlSetup;
-import me.avankziar.wsop.spigot.handler.ConfigHandler;
+import me.avankziar.wsop.spigot.handler.TeamHandler;
 import me.avankziar.wsop.spigot.listener.JoinLeaveListener;
 import me.avankziar.wsop.spigot.metric.Metrics;
 
@@ -57,9 +52,9 @@ public class WSOP extends JavaPlugin
 	private Utility utility;
 	private BackgroundTask backgroundTask;
 	
+	private TeamHandler teamHandler;
+	
 	private Administration administrationConsumer;
-	private ValueEntry valueEntryConsumer;
-	private Modifier modifierConsumer;
 	
 	public void onEnable()
 	{
@@ -178,7 +173,7 @@ public class WSOP extends JavaPlugin
 		TabCompletion tab = new TabCompletion();
 		
 		CommandConstructor base = new CommandConstructor(CommandSuggest.Type.BASE, "base", false, false);
-		registerCommand(base, new BaseCommandExecutor(plugin, base), tab);
+		registerCommand(base, new TeamCommandExecutor(plugin, base), tab);
 		
 		//ArgumentConstructor add = new ArgumentConstructor(CommandSuggest.Type.FRIEND_ADD, "friend_add", 0, 1, 1, false, playerMapI);
 		//CommandConstructor friend = new CommandConstructor(CommandSuggest.Type.FRIEND, "friend", false, add, remove);
@@ -353,163 +348,26 @@ public class WSOP extends JavaPlugin
 	
 	public void setupIFHConsumer()
 	{
-		setupIFHValueEntry();
-		setupIFHModifier();
+		
 	}
 	
-	public void setupIFHValueEntry()
-	{
-		if(!new ConfigHandler().isMechanicValueEntryEnabled())
-		{
-			return;
-		}
-		if(!plugin.getServer().getPluginManager().isPluginEnabled("InterfaceHub")) 
-	    {
-	    	return;
-	    }
-        new BukkitRunnable()
+	private void setupPermissionApis()
+    {
+		Plugin lp = getServer().getPluginManager().getPlugin("LuckPerms");
+        if(lp != null && lp.isEnabled()) 
         {
-        	int i = 0;
-			@Override
-			public void run()
-			{
-				try
-				{
-					if(i == 20)
-				    {
-						cancel();
-				    	return;
-				    }
-					RegisteredServiceProvider<me.avankziar.ifh.general.valueentry.ValueEntry> rsp = 
-                            getServer().getServicesManager().getRegistration(
-                           		 me.avankziar.ifh.general.valueentry.ValueEntry.class);
-				    if(rsp == null) 
-				    {
-				    	i++;
-				        return;
-				    }
-				    valueEntryConsumer = rsp.getProvider();
-				    logger.info(pluginname + " detected InterfaceHub >>> ValueEntry.class is consumed!");
-				    cancel();
-				} catch(NoClassDefFoundError e)
-				{
-					cancel();
-				}
-				if(getValueEntry() != null)
-				{
-					//Command Bonus/Malus init
-					for(BaseConstructor bc : getHelpList())
-					{
-						if(!bc.isPutUpCmdPermToValueEntrySystem())
-						{
-							continue;
-						}
-						if(getValueEntry().isRegistered(bc.getValueEntryPath(pluginname)))
-						{
-							continue;
-						}
-						String[] ex = {plugin.getYamlHandler().getCommands().getString(bc.getPath()+".Explanation")};
-						getValueEntry().register(
-								bc.getValueEntryPath(pluginname),
-								plugin.getYamlHandler().getCommands().getString(bc.getPath()+".Displayname", "Command "+bc.getName()),
-								ex);
-					}
-					//Bypass Perm Bonus/Malus init
-					List<Bypass.Permission> list = new ArrayList<Bypass.Permission>(EnumSet.allOf(Bypass.Permission.class));
-					for(Bypass.Permission ept : list)
-					{
-						if(getValueEntry().isRegistered(ept.getValueLable()))
-						{
-							continue;
-						}
-						List<String> lar = plugin.getYamlHandler().getMVELang().getStringList(ept.toString()+".Explanation");
-						getValueEntry().register(
-								ept.getValueLable(),
-								plugin.getYamlHandler().getMVELang().getString(ept.toString()+".Displayname", ept.toString()),
-								lar.toArray(new String[lar.size()]));
-					}
-				}
-			}
-        }.runTaskTimer(plugin, 0L, 20*2);
-	}
-	
-	public ValueEntry getValueEntry()
-	{
-		return valueEntryConsumer;
-	}
-	
-	private void setupIFHModifier() 
-	{
-		if(!new ConfigHandler().isMechanicModifierEnabled())
-		{
-			return;
-		}
-        if(Bukkit.getPluginManager().getPlugin("InterfaceHub") == null) 
-        {
-            return;
+        	teamHandler = new TeamHandler(plugin, net.luckperms.api.LuckPermsProvider.get());
         }
-        new BukkitRunnable()
+        if(teamHandler == null)
         {
-        	int i = 0;
-			@Override
-			public void run()
-			{
-				try
-				{
-					if(i == 20)
-				    {
-						cancel();
-						return;
-				    }
-				    RegisteredServiceProvider<me.avankziar.ifh.general.modifier.Modifier> rsp = 
-                            getServer().getServicesManager().getRegistration(
-                           		 me.avankziar.ifh.general.modifier.Modifier.class);
-				    if(rsp == null) 
-				    {
-				    	//Check up to 20 seconds after the start, to connect with the provider
-				    	i++;
-				        return;
-				    }
-				    modifierConsumer = rsp.getProvider();
-				    logger.info(pluginname + " detected InterfaceHub >>> Modifier.class is consumed!");
-				    cancel();
-				} catch(NoClassDefFoundError e)
-				{
-					cancel();
-				}
-				if(getModifier() != null)
-				{
-					//Bypass CountPerm init
-					List<Bypass.Counter> list = new ArrayList<Bypass.Counter>(EnumSet.allOf(Bypass.Counter.class));
-					for(Bypass.Counter ept : list)
-					{
-						if(getModifier().isRegistered(ept.getModification()))
-						{
-							continue;
-						}
-						ModificationType bmt = null;
-						switch(ept)
-						{
-						case BASE:
-							bmt = ModificationType.UP;
-							break;
-						}
-						List<String> lar = plugin.getYamlHandler().getMVELang().getStringList(ept.toString()+".Explanation");
-						getModifier().register(
-								ept.getModification(),
-								plugin.getYamlHandler().getMVELang().getString(ept.toString()+".Displayname", ept.toString()),
-								bmt,
-								lar.toArray(new String[lar.size()]));
-					}
-				}
-			}
-        }.runTaskTimer(plugin, 20L, 20*2);
-	}
+        	shutdown();
+        }
+    }
 	
-	public Modifier getModifier()
-	{
-		return modifierConsumer;
-	}
+	public TeamHandler getTeamHandler()
+    {
+    	return teamHandler;
+    }
 	
 	public void setupBstats()
 	{

@@ -8,7 +8,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import me.avankziar.wsop.general.database.MysqlBaseHandler;
-import me.avankziar.wsop.general.objects.PlayerData;
+import me.avankziar.wsop.general.objects.ChangingGroup;
 
 public class Utility
 {
@@ -36,18 +36,18 @@ public class Utility
 	
 	public static String convertUUIDToName(String uuid)
 	{
-		if(mysqlBaseHandler.exist(new PlayerData(), "player_uuid = ?", uuid))
+		if(mysqlBaseHandler.exist(new ChangingGroup(), "player_uuid = ?", uuid))
 		{
-			return ((PlayerData) mysqlBaseHandler.getData(new PlayerData(), "player_uuid = ?", uuid)).getName();
+			return ((ChangingGroup) mysqlBaseHandler.getData(new ChangingGroup(), "player_uuid = ?", uuid)).getName();
 		}
 		return null;
 	}
 	
 	public static UUID convertNameToUUID(String playername)
 	{
-		if(mysqlBaseHandler.exist(new PlayerData(), "`player_name` = ?", playername))
+		if(mysqlBaseHandler.exist(new ChangingGroup(), "`player_name` = ?", playername))
 		{
-			return ((PlayerData) mysqlBaseHandler.getData(new PlayerData(), "`player_name` = ?", playername)).getUUID();
+			return ((ChangingGroup) mysqlBaseHandler.getData(new ChangingGroup(), "`player_name` = ?", playername)).getUUID();
 		}
 		return null;
 	}

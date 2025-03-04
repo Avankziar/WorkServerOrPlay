@@ -21,15 +21,15 @@ import me.avankziar.wsop.spigot.WSOP;
 import me.avankziar.wsop.spigot.cmdtree.ArgumentModule;
 import net.md_5.bungee.api.chat.ClickEvent;
 
-public class BaseCommandExecutor implements CommandExecutor
+public class TeamCommandExecutor implements CommandExecutor
 {
 	private WSOP plugin;
 	private static CommandConstructor cc;
 	
-	public BaseCommandExecutor(WSOP plugin, CommandConstructor cc)
+	public TeamCommandExecutor(WSOP plugin, CommandConstructor cc)
 	{
 		this.plugin = plugin;
-		BaseCommandExecutor.cc = cc;
+		TeamCommandExecutor.cc = cc;
 	}
 	
 	@Override

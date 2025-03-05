@@ -162,7 +162,7 @@ public class BaseCommandExecutor implements SimpleCommand
 		} else
 		{
 			player.sendMessage(ChatApiV.tl(ChatApiV.click(plugin.getYamlHandler().getLang().getString("InputIsWrong"),
-					"RUN_COMMAND", CommandSuggest.getCmdString(CommandSuggest.Type.BASE))));
+					"RUN_COMMAND", CommandSuggest.getCmdString(CommandSuggest.Type.WSOP))));
 		}
 		return;
 	}
@@ -186,7 +186,7 @@ public class BaseCommandExecutor implements SimpleCommand
 			count++;
 			last++;
 		}
-		pastNextPage(player, page, last, CommandSuggest.getCmdString(CommandSuggest.Type.BASE));
+		pastNextPage(player, page, last, CommandSuggest.getCmdString(CommandSuggest.Type.WSOP));
 	}
 	
 	private void sendInfo(Player player, BaseConstructor bc)

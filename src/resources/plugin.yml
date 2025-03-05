@@ -5,6 +5,6 @@ author: Avankziar
 api-version: 1.21
 description: A mc plugin, where staffmembers can turn off there groups to play normally.
 depend: [InterfaceHub]
-softdepend: [RootAdministration]
+softdepend: [RootAdministration,LuckPerm]
 website: TBA
 prefix: WSOP

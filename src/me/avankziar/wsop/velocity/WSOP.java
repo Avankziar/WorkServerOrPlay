@@ -190,7 +190,7 @@ public class WSOP
     private void setupCommandTree()
 	{
     	CommandManager cm = getServer().getCommandManager();
-    	CommandConstructor base = new CommandConstructor(CommandSuggest.Type.BASE, "base", true, false);
+    	CommandConstructor base = new CommandConstructor(CommandSuggest.Type.WSOP, "base", true, false);
 		CommandMeta basemeta = cm.metaBuilder(base.getName()).plugin(plugin).build();
 		
 		cm.register(basemeta, new BaseCommandExecutor(plugin, base));

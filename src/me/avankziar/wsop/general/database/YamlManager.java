@@ -666,23 +666,39 @@ public class YamlManager
 	{
 		comBypass();
 		String path = "";
-		commandsInput("path", "base", "perm.command.perm", 
-				"/base [pagenumber]", "/base ", false,
-				"&c/base &f| Infoseite für alle Befehle.",
-				"&c/base &f| Info page for all commands.",
-				"&bBefehlsrecht für &f/base",
-				"&bCommandright for &f/base",
-				"&eBasisbefehl für das BaseTemplate Plugin.",
-				"&eGroundcommand for the BaseTemplate Plugin.");
-		String basePermission = "perm.base.";
-		argumentInput("base_argument", "argument", basePermission,
-				"/base argument <id>", "/econ deletelog ", false,
-				"&c/base argument &f| Ein Subbefehl",
-				"&c/base argument &f| A Subcommand.",
-				"&bBefehlsrecht für &f/base argument",
-				"&bCommandright for &f/base argument",
-				"&eBasisbefehl für das BaseTemplate Plugin.",
-				"&eGroundcommand for the BaseTemplate Plugin.");
+		commandsInput("wsop", "wsop", "wsop.command", 
+				"/wsop [pagenumber]", "/wsop ", false,
+				"<red>/wsop <white>| Infoseite für alle Befehle.",
+				"<red>/wsop <white>| Info page for all commands.",
+				"<aqua>Befehlsrecht für <white>/wsop",
+				"<aqua>Commandright for <white>/wsop",
+				"<yellow>Basisbefehl für das BaseTemplate Plugin.",
+				"<yellow>Groundcommand for the BaseTemplate Plugin.");
+		commandsInput("team", "team", "team.command", 
+				"/team", "/team ", false,
+				"<red>/team <white>| Zeigt an, ob momentan man als Spieler oder Teamler unterwegs ist.",
+				"<red>/team <white>| Shows whether you are currently playing as a player or a team member.",
+				"<aqua>Befehlsrecht für <white>/team",
+				"<aqua>Commandright for <white>/team",
+				"<yellow>Zeigt an, ob momentan man als Spieler oder Teamler unterwegs ist.",
+				"<yellow>Shows whether you are currently playing as a player or a team member.");
+		String basePermission = "team.cmd";
+		argumentInput("team_off", "off", basePermission,
+				"/team off", "/team off ", false,
+				"<red>/team off <white>| Schaltet die Teampermission Gruppe ab und lagert sie in der Datenbank zwischen.",
+				"<red>/team off <white>| Disables the team permission group and stores it temporarily in the database.",
+				"<aqua>Befehlsrecht für <white>/team off",
+				"<aqua>Commandright for <white>/team off",
+				"<yellow>Schaltet die Teampermission Gruppe ab und lagert sie in der Datenbank zwischen.",
+				"<yellow>Disables the team permission group and stores it temporarily in the database.");
+		argumentInput("team_on", "on", basePermission,
+				"/team on", "/team on ", false,
+				"<red>/team on <white>| Schaltet die Teampermission Gruppe an und holt alle Permissiongruppen aus der Datenbank und löscht sie daraus im nachhinein.",
+				"<red>/team on <white>| Enables the team permission group and retrieves all permission groups from the database and deletes them afterwards.",
+				"<aqua>Befehlsrecht für <white>/team on",
+				"<aqua>Commandright for <white>/team on",
+				"<yellow>Schaltet die Teampermission Gruppe an und holt alle Permissiongruppen aus der Datenbank und löscht sie daraus im nachhinein.",
+				"<yellow>Enables the team permission group and retrieves all permission groups from the database and deletes them afterwards.");
 	}
 	
 	private void comBypass() //INFO:ComBypass
@@ -782,75 +798,75 @@ public class YamlManager
 	{
 		languageKeys.put("InputIsWrong",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDeine Eingabe ist fehlerhaft! Klicke hier auf den Text, um weitere Infos zu bekommen!",
-						"&cYour input is incorrect! Click here on the text to get more information!"}));
+						"<red>Deine Eingabe ist fehlerhaft! Klicke hier auf den Text, um weitere Infos zu bekommen!",
+						"<red>Your input is incorrect! Click here on the text to get more information!"}));
 		languageKeys.put("NoPermission",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu hast dafür keine Rechte!",
-						"&cYou dont not have the rights!"}));
+						"<red>Du hast dafür keine Rechte!",
+						"<red>You dont not have the rights!"}));
 		languageKeys.put("NoPlayerExist",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Spieler existiert nicht!",
-						"&cThe player does not exist!"}));
+						"<red>Der Spieler existiert nicht!",
+						"<red>The player does not exist!"}));
 		languageKeys.put("NoNumber",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDas Argument &f%value% &cmuss eine ganze Zahl sein.",
-						"&cThe argument &f%value% &must be an integer."}));
+						"<red>Das Argument &f%value% <red>muss eine ganze Zahl sein.",
+						"<red>The argument &f%value% <red>must be an integer."}));
 		languageKeys.put("NoDouble",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDas Argument &f%value% &cmuss eine Gleitpunktzahl sein!",
-						"&cThe argument &f%value% &must be a floating point number!"}));
+						"<red>Das Argument &f%value% <red>muss eine Gleitpunktzahl sein!",
+						"<red>The argument &f%value% <red>must be a floating point number!"}));
 		languageKeys.put("IsNegativ",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDas Argument &f%value% &cmuss eine positive Zahl sein!",
-						"&cThe argument &f%value% &must be a positive number!"}));
+						"<red>Das Argument &f%value% <red>muss eine positive Zahl sein!",
+						"<red>The argument &f%value% &must be a positive number!"}));
 		languageKeys.put("GeneralHover",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eKlick mich!",
-						"&eClick me!"}));
+						"<yellow>Klick mich!",
+						"<yellow>Click me!"}));
 		languageKeys.put("Headline", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e=====&7[&6BungeeTeleportManager&7]&e=====",
-						"&e=====&7[&6BungeeTeleportManager&7]&e====="}));
+						"<yellow>=====<gray>[<gold>BungeeTeleportManager<gray>]<yellow>=====",
+						"<yellow>=====<gray>[<gold>BungeeTeleportManager<gray>]<yellow>====="}));
 		languageKeys.put("Next", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e&nnächste Seite &e==>",
-						"&e&nnext page &e==>"}));
+						"<yellow>&nnächste Seite <yellow>==>",
+						"<yellow>&nnext page <yellow>==>"}));
 		languageKeys.put("Past", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e<== &nvorherige Seite",
-						"&e<== &nprevious page"}));
+						"<yellow><== &nvorherige Seite",
+						"<yellow><== &nprevious page"}));
 		languageKeys.put("IsTrue", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&a✔",
-						"&a✔"}));
+						"<green>✔",
+						"<green>✔"}));
 		languageKeys.put("IsFalse", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&c✖",
-						"&c✖"}));
+						"<red>✖",
+						"<red>✖"}));
 	}
 	
 	public void initModifierValueEntryLanguage() //INFO:BonusMalusLanguages
 	{
 		mvelanguageKeys.put(Bypass.Permission.BASE.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eByasspermission für",
-						"&eBypasspermission for"}));
+						"<yellow>Byasspermission für",
+						"<yellow>Bypasspermission for"}));
 		mvelanguageKeys.put(Bypass.Permission.BASE.toString()+".Explanation",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eByasspermission für",
-						"&edas Plugin BaseTemplate",
-						"&eBypasspermission for",
-						"&ethe plugin BaseTemplate"}));
+						"<yellow>Byasspermission für",
+						"<yellow>das Plugin BaseTemplate",
+						"<yellow>Bypasspermission for",
+						"<yellow>the plugin BaseTemplate"}));
 		mvelanguageKeys.put(Bypass.Counter.BASE.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eZählpermission für",
-						"&eCountpermission for"}));
+						"<yellow>Zählpermission für",
+						"<yellow>Countpermission for"}));
 		mvelanguageKeys.put(Bypass.Counter.BASE.toString()+".Explanation",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eZählpermission für",
-						"&edas Plugin BaseTemplate",
-						"&eCountpermission for",
-						"&ethe plugin BaseTemplate"}));
+						"<yellow>Zählpermission für",
+						"<yellow>das Plugin BaseTemplate",
+						"<yellow>Countpermission for",
+						"<yellow>the plugin BaseTemplate"}));
 	}
 }

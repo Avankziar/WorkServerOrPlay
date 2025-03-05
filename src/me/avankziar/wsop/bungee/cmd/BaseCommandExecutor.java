@@ -154,7 +154,7 @@ public class BaseCommandExecutor extends Command
 		} else
 		{
 			player.sendMessage(ChatApiB.click(plugin.getYamlHandler().getLang().getString("InputIsWrong"),
-					"RUN_COMMAND", CommandSuggest.getCmdString(CommandSuggest.Type.BASE)));
+					"RUN_COMMAND", CommandSuggest.getCmdString(CommandSuggest.Type.WSOP)));
 		}
 		return;
 	}
@@ -183,7 +183,7 @@ public class BaseCommandExecutor extends Command
 		{
 			lastpage = true;
 		}
-		pastNextPage(player, page, lastpage, CommandSuggest.getCmdString(CommandSuggest.Type.BASE));
+		pastNextPage(player, page, lastpage, CommandSuggest.getCmdString(CommandSuggest.Type.WSOP));
 	}
 	
 	private void sendInfo(ProxiedPlayer player, BaseConstructor bc)

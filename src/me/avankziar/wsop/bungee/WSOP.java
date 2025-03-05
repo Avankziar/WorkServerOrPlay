@@ -121,7 +121,7 @@ public class WSOP extends Plugin
 	private void setupCommandTree()
 	{
 		PluginManager pm = getProxy().getPluginManager();
-		CommandConstructor base = new CommandConstructor(CommandSuggest.Type.BASE, "base", true, false);
+		CommandConstructor base = new CommandConstructor(CommandSuggest.Type.WSOP, "base", true, false);
 		pm.registerCommand(plugin, new BaseCommandExecutor(plugin, base));
 	}
 	

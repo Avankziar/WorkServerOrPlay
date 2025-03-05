@@ -32,7 +32,7 @@ import me.avankziar.wsop.general.database.YamlManager;
 import me.avankziar.wsop.spigot.ModifierValueEntry.Bypass;
 import me.avankziar.wsop.spigot.assistance.BackgroundTask;
 import me.avankziar.wsop.spigot.cmd.TabCompletion;
-import me.avankziar.wsop.spigot.cmd.TeamCommandExecutor;
+import me.avankziar.wsop.spigot.cmd.WSOPCommandExecutor;
 import me.avankziar.wsop.spigot.cmdtree.ArgumentModule;
 import me.avankziar.wsop.spigot.database.MysqlHandler;
 import me.avankziar.wsop.spigot.database.MysqlSetup;
@@ -93,6 +93,8 @@ public class WSOP extends JavaPlugin
 		BaseConstructor.init(yamlHandler);
 		utility = new Utility(mysqlHandler);
 		backgroundTask = new BackgroundTask(this);
+		
+		setupPermissionApis();
 		
 		setupBypassPerm();
 		setupCommandTree();
@@ -172,8 +174,8 @@ public class WSOP extends JavaPlugin
 	{		
 		TabCompletion tab = new TabCompletion();
 		
-		CommandConstructor base = new CommandConstructor(CommandSuggest.Type.BASE, "base", false, false);
-		registerCommand(base, new TeamCommandExecutor(plugin, base), tab);
+		CommandConstructor wsop = new CommandConstructor(CommandSuggest.Type.WSOP, "wsop", false, false);
+		registerCommand(wsop, new WSOPCommandExecutor(plugin, wsop), tab);
 		
 		//ArgumentConstructor add = new ArgumentConstructor(CommandSuggest.Type.FRIEND_ADD, "friend_add", 0, 1, 1, false, playerMapI);
 		//CommandConstructor friend = new CommandConstructor(CommandSuggest.Type.FRIEND, "friend", false, add, remove);

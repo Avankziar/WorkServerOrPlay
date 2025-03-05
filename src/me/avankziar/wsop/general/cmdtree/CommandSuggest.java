@@ -9,8 +9,10 @@ public class CommandSuggest
 	 */
 	public enum Type 
 	{
-		BASE,
-		BASE_BASE
+		WSOP,
+		TEAM,
+		TEAM_ON,
+		TEAM_OFF
 	}
 	
 	public static LinkedHashMap<CommandSuggest.Type, BaseConstructor> map = new LinkedHashMap<>();

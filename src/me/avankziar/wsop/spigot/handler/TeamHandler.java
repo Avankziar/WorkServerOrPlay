@@ -1,11 +1,10 @@
 package me.avankziar.wsop.spigot.handler;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import org.bukkit.entity.Player;
 
 import me.avankziar.wsop.general.handler.TeamBaseHandler;
 import me.avankziar.wsop.general.objects.ChangingGroup;
@@ -38,7 +37,7 @@ public class TeamHandler extends TeamBaseHandler
 		return false;
 	}
 	
-	public static void changeToPlay(Player player, UUID uuid)
+	public static void changeToPlay(UUID uuid)
 	{
 		User user = lp.getUserManager().getUser(uuid);
 		String primary = user.getPrimaryGroup();
@@ -59,13 +58,33 @@ public class TeamHandler extends TeamBaseHandler
 			plugin.getMysqlHandler().create(cg);
 			user.data().remove(in);
 		}
+		user.setPrimaryGroup(defaultGroup);
 		InheritanceNode.Builder b = InheritanceNode.builder().group(defaultGroup);
 		user.data().add(b.build());
 		CompletableFuture.runAsync(() -> lp.getUserManager().saveUser(user));
 	}
 	
-	public static void changeToWork(Player player)
+	public static void changeToWork(UUID uuid)
 	{
-		
+		ArrayList<ChangingGroup> cgs = plugin.getMysqlHandler().getFullList(
+				new ChangingGroup(), "`id` ASC", "`player_uuid` = ?", uuid.toString());
+		User user = lp.getUserManager().getUser(uuid);
+		for(ChangingGroup cg : cgs)
+		{
+			if(cg.isPrimaryGroup())
+			{
+				user.setPrimaryGroup(cg.getChangedGroup());
+			}
+			
+			InheritanceNode.Builder b = InheritanceNode.builder()
+					.group(cg.getChangedGroup());
+			for(Entry<String, String> e : cg.getContextMap().entrySet())
+			{
+				b.withContext(e.getKey(), e.getValue());
+			}
+			user.data().add(b.build());
+		}
+		CompletableFuture.runAsync(() -> lp.getUserManager().saveUser(user));
+		plugin.getMysqlHandler().deleteData(new ChangingGroup(), "`player_uuid` = ?", uuid.toString());
 	}
 }

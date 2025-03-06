@@ -37,10 +37,11 @@ public class TeamHandler extends TeamBaseHandler
 		return false;
 	}
 	
-	public static void changeToPlay(UUID uuid)
+	public static boolean changeToPlay(UUID uuid)
 	{
 		User user = lp.getUserManager().getUser(uuid);
 		String primary = user.getPrimaryGroup();
+		int i = 0;
 		for(InheritanceNode in : user.resolveInheritedNodes(QueryOptions.nonContextual()).stream()
 				.filter(NodeType.INHERITANCE::matches)
 				.filter(x -> !x.hasExpiry())
@@ -57,11 +58,17 @@ public class TeamHandler extends TeamBaseHandler
 					primary.equals(in.getGroupName()), context.toArray(new String[context.size()]));
 			plugin.getMysqlHandler().create(cg);
 			user.data().remove(in);
+			i++;
+		}
+		if(i == 0)
+		{
+			return false;
 		}
 		user.setPrimaryGroup(defaultGroup);
 		InheritanceNode.Builder b = InheritanceNode.builder().group(defaultGroup);
 		user.data().add(b.build());
 		CompletableFuture.runAsync(() -> lp.getUserManager().saveUser(user));
+		return true;
 	}
 	
 	public static void changeToWork(UUID uuid)
@@ -75,7 +82,6 @@ public class TeamHandler extends TeamBaseHandler
 			{
 				user.setPrimaryGroup(cg.getChangedGroup());
 			}
-			
 			InheritanceNode.Builder b = InheritanceNode.builder()
 					.group(cg.getChangedGroup());
 			for(Entry<String, String> e : cg.getContextMap().entrySet())

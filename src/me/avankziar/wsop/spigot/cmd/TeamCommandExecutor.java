@@ -132,10 +132,10 @@ public class TeamCommandExecutor  implements CommandExecutor
 	{
 		if(plugin.getMysqlHandler().exist(new ChangingGroup(), "`player_uuid` = ?", player.getUniqueId().toString()))
 		{
-			
+			MessageHandler.sendMessage(player, plugin.getYamlHandler().getLang().getString("Team.Status.IsDeactive"));
 		} else
 		{
-			
+			MessageHandler.sendMessage(player, plugin.getYamlHandler().getLang().getString("Team.Status.IsActive"));
 		}
 	}
 }

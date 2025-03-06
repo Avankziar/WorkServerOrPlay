@@ -844,6 +844,26 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"<red>✖",
 						"<red>✖"}));
+		languageKeys.put("Team.Status.IsActive", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"<yellow>Du hast momentan alle Permissiongruppen aktiviert.",
+						"<yellow>You currently have all permission groups activated."}));
+		languageKeys.put("Team.Status.IsDeactive", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"<green>Du hast momentan Permissiongruppen deaktiviert.",
+						"<green>You currently have permission groups disabled."}));
+		languageKeys.put("Team.On.WasActivated", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"<white>Achtung! <yellow>Es wurden nun alle gespeicherte Permissiongruppen akiviert!",
+						"<white>Attention! <yellow>All saved permission groups have now been activated!"}));
+		languageKeys.put("Team.Off.WasDeactivated", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"<white>Achtung! <green>Es wurden nun alle nötigen Permissiongruppen abgelegt und gespeichert. Viel Spaß beim Spielen.",
+						"<white>Attention! <green>All necessary permission groups have now been filed and saved. Have fun playing."}));
+		languageKeys.put("Team.Off.HasNoPermissionGroupToSave", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"<red>Es wurde keine Permissiongruppen gefunden, die abgelegt und gespeichert werden müssen!",
+						"<red>No permission groups were found that need to be filed and saved!"}));
 	}
 	
 	public void initModifierValueEntryLanguage() //INFO:BonusMalusLanguages

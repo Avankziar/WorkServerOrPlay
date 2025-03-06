@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.avankziar.ifh.spigot.administration.Administration;
 import me.avankziar.wsop.general.assistance.Utility;
+import me.avankziar.wsop.general.cmdtree.ArgumentConstructor;
 import me.avankziar.wsop.general.cmdtree.BaseConstructor;
 import me.avankziar.wsop.general.cmdtree.CommandConstructor;
 import me.avankziar.wsop.general.cmdtree.CommandSuggest;
@@ -32,7 +33,10 @@ import me.avankziar.wsop.general.database.YamlManager;
 import me.avankziar.wsop.spigot.ModifierValueEntry.Bypass;
 import me.avankziar.wsop.spigot.assistance.BackgroundTask;
 import me.avankziar.wsop.spigot.cmd.TabCompletion;
+import me.avankziar.wsop.spigot.cmd.TeamCommandExecutor;
 import me.avankziar.wsop.spigot.cmd.WSOPCommandExecutor;
+import me.avankziar.wsop.spigot.cmd.team.ARG_Off;
+import me.avankziar.wsop.spigot.cmd.team.ARG_On;
 import me.avankziar.wsop.spigot.cmdtree.ArgumentModule;
 import me.avankziar.wsop.spigot.database.MysqlHandler;
 import me.avankziar.wsop.spigot.database.MysqlSetup;
@@ -176,6 +180,16 @@ public class WSOP extends JavaPlugin
 		
 		CommandConstructor wsop = new CommandConstructor(CommandSuggest.Type.WSOP, "wsop", false, false);
 		registerCommand(wsop, new WSOPCommandExecutor(plugin, wsop), tab);
+		
+		ArgumentConstructor team_on = new ArgumentConstructor(CommandSuggest.Type.TEAM_ON, "team_on", 0, 0, 0, false, false, null);
+		ArgumentConstructor team_off = new ArgumentConstructor(CommandSuggest.Type.TEAM_OFF, "team_off", 0, 0, 0, false, false, null);
+		
+		CommandConstructor team = new CommandConstructor(CommandSuggest.Type.TEAM, "team", false, false,
+				team_on, team_off);
+		registerCommand(team, new TeamCommandExecutor(plugin, team), tab);
+		
+		new ARG_On(team_on);
+		new ARG_Off(team_off);
 		
 		//ArgumentConstructor add = new ArgumentConstructor(CommandSuggest.Type.FRIEND_ADD, "friend_add", 0, 1, 1, false, playerMapI);
 		//CommandConstructor friend = new CommandConstructor(CommandSuggest.Type.FRIEND, "friend", false, add, remove);

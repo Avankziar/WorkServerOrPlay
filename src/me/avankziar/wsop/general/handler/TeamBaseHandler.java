@@ -13,7 +13,7 @@ public class TeamBaseHandler
 	
 	public TeamBaseHandler(YamlDocument config, LuckPerms lp)
 	{
-		this.lp = lp;
+		TeamBaseHandler.lp = lp;
 		defaultGroup = config.getString("DefaultGroup", "default");
 		toConservatingGroup = config.getStringList("ChangingGroups");
 	}

@@ -147,7 +147,7 @@ public class ChangingGroup implements MysqlTable<ChangingGroup>
 		{
 			String sql = "INSERT INTO `" + getMysqlTableName()
 					+ "`(`player_uuid`, `player_name`, `changing_groups`, `primary_group`, `contextset`) " 
-					+ "VALUES(?, ?, ?)";
+					+ "VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 	        ps.setString(1, getUUID().toString());
 	        ps.setString(2, getName());

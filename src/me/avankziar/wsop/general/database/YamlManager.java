@@ -478,7 +478,7 @@ public class YamlManager
 				"If 'true' is entered, but IFH Administration is not available, the own config values are automatically used."});
 		addConfig("IFHAdministrationPath", 
 				new Object[] {
-				"bm"},
+				"wsop"},
 				new Object[] {
 				"",
 				"Diese Funktion sorgt dafür, dass das Plugin auf das IFH Interface Administration zugreifen kann.",
@@ -608,57 +608,24 @@ public class YamlManager
 				"Das Passwort des Users, womit er Zugang zu Mysql bekommt.",
 				"",
 				"The user's password, with which he gets access to Mysql."});
-		
-		addConfig("EnableMechanic.Modifier",
+		addConfig("DefaultGroup",
 				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"Ermöglicht TT die Benutzung von IFH Interface Modifier.",
-				"Es erlaubt, dass externe Plugins oder per Befehl Zahlenmodifikatoren in bestimmte Werten einfließen.",
-				"Bspw. könnte es dazu führen, dass die Spieler mehr regestrierte Öfen besitzen dürfen.",
-				"",
-				"Enables TT to use IFH interface modifiers.",
-				"It allows external plugins or by command to include number modifiers in certain values.",
-				"For example, it could lead to players being allowed to own more registered furnace."});
-		addConfig("EnableMechanic.ValueEntry",
-				new Object[] {
-				true},
+				"default"},
 				new Object[] {
 				"",
-				"Ermöglicht TT die Benutzung von IFH Interface ValueEntry.",
-				"Es erlaubt, dass externe Plugins oder per Befehl Werteeinträge vornehmen.",
-				"Bspw. könnte man dadurch bestimmte Befehle oder Technologien für Spieler freischalten.",
 				"",
-				"Enables TT to use the IFH interface ValueEntry.",
-				"It allows external plugins or commands to make value entries.",
-				"For example, it could be used to unlock certain commands or technologies for players."});		
-		addConfig("ValueEntry.OverrulePermission",
+				"",
+				""});		
+		addConfig("ChangingGroups",
 				new Object[] {
-				false},
+				"admin",
+				"mod",
+				"supporter"},
 				new Object[] {
 				"",
-				"Sollte ValueEntry eingeschalten und installiert sein, so wird bei fast allen Permissionabfragen ValueEntry mit abgefragt.",
-				"Fall 1: ValueEntry ist nicht vorhanden oder nicht eingschaltet. So wird die Permission normal abgefragt.",
-				"Für alle weitern Fälle ist ValueEntry vorhanden und eingeschaltet.",
-				"Fall 2: Der Werteeintrag für den Spieler für diesen abgefragten Wert ist nicht vorhanden,",
-				"so wird wenn 'OverrulePermission'=true immer 'false' zurückgegeben.",
-				"Ist 'OverrulePermission'=false wird eine normale Permissionabfrage gemacht.",
-				"Fall 3: Der Werteeintrag für den Spieler für diesen abgefragten Wert ist vorhanden,",
-				"so wird wenn 'OverrulePermission'=true der hinterlegte Werteeintrag zurückgegebn.",
-				"Wenn 'OverrulePermission'=false ist, wird 'true' zurückgegeben wenn der hinterlegte Werteeintrag ODER die Permissionabfrage 'true' ist.",
-				"Sollten beide 'false' sein, wird 'false' zurückgegeben.",
 				"",
-				"If ValueEntry is switched on and installed, ValueEntry is also queried for almost all permission queries.",
-				"Case 1: ValueEntry is not present or not switched on. The permission is queried normally.",
-				"For all other cases, ValueEntry is present and switched on.",
-				"Case 2: The value entry for the player for this queried value is not available,",
-				"so if 'OverrulePermission'=true, 'false' is always returned.",
-				"If 'OverrulePermission'=false, a normal permission query is made.",
-				"Case 3: The value entry for the player for this queried value exists,",
-				"so if 'OverrulePermission'=true the stored value entry is returned.",
-				"If 'OverrulePermission'=false, 'true' is returned if the stored value entry OR the permission query is 'true'.",
-				"If both are 'false', 'false' is returned."});
+				"",
+				""});
 	}
 	
 	@SuppressWarnings("unused") //INFO:Commands

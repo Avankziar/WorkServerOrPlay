@@ -54,7 +54,7 @@ public class TeamHandler extends TeamBaseHandler
 			}
 			ArrayList<String> context = new ArrayList<>();
 			in.getContexts().forEach(x -> context.add(x.getKey()+"="+x.getValue()));
-			ChangingGroup cg = new ChangingGroup(0, uuid, "", in.getGroupName(),
+			ChangingGroup cg = new ChangingGroup(0, uuid, "n", in.getGroupName(),
 					primary.equals(in.getGroupName()), context.toArray(new String[context.size()]));
 			plugin.getMysqlHandler().create(cg);
 			user.data().remove(in);
@@ -90,6 +90,7 @@ public class TeamHandler extends TeamBaseHandler
 			}
 			user.data().add(b.build());
 		}
+		user.data().remove(InheritanceNode.builder().group(defaultGroup).build());
 		CompletableFuture.runAsync(() -> lp.getUserManager().saveUser(user));
 		plugin.getMysqlHandler().deleteData(new ChangingGroup(), "`player_uuid` = ?", uuid.toString());
 	}

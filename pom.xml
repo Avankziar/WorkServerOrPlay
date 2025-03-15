@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.avankziar</groupId>
-	<artifactId>basetemplate</artifactId>
-	<version>1-4-0</version>
-	<name>BaseTemplate</name>
+	<artifactId>workserverorplay</artifactId>
+	<version>1-0-0</version>
+	<name>WorkServerOrPlay</name>
 	<url>https://github.com/${repository-owner}/${repository-name}.git</url>
     <scm>
         <url>https://github.com/${repository-owner}/${repository-name}.git</url>
